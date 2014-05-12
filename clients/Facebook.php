@@ -2,7 +2,7 @@
 
 namespace filsh\yii2\social\clients;
 
-class Facebook extends BaseClient implements ClientInterface
+class Facebook extends \yii\authclient\clients\Facebook implements \filsh\yii2\social\ClientInterface
 {
     private $_api;
     

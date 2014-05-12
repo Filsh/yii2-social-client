@@ -17,6 +17,7 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
+        "yiisoft/yii2-authclient": "*",
         "facebook/php-sdk": "*"
     },
     "autoload": {
