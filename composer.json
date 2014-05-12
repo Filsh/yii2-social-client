@@ -17,7 +17,7 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "facebook/php-sdk": "@stable"
+        "facebook/php-sdk": "*"
     },
     "autoload": {
         "psr-4": {
