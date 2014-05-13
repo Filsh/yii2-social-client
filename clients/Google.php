@@ -40,12 +40,11 @@ class Google extends \yii\authclient\clients\GoogleOAuth implements \filsh\yii2\
         parent::setAccessToken($token);
     }
     
-    public function getUserAvatar(array $params = [])
+    public function getUserAvatar()
     {
         $result = $this->getOauth2Service()->userinfo->get();
         if(!empty($result['picture'])) {
-            $size = isset($params['size']) ? $params['size'] : 500;
-            return $result['picture'] . (!empty($size) ? '?sz=' . $size : '');
+            return $result['picture'] . '?sz=500';
         }
         return null;
     }

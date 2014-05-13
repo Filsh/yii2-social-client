@@ -33,16 +33,25 @@ class Facebook extends \yii\authclient\clients\Facebook implements \filsh\yii2\s
         parent::setAccessToken($token);
     }
     
-    public function getUserAvatar(array $params = [])
+    public function getUserAvatar()
     {
-        $result = $this->_api->api($this->getUserId() . '/picture', 'GET', array_merge([
+        $result = $this->_api->api($this->getUserId() . '/picture', 'GET', [
             'width' => 500,
             'height' => 500,
             'redirect' => false
-        ], $params));
+        ]);
 
         if(!empty($result['data']) && !$result['data']['is_silhouette']) {
             return $result['data']['url'];
+        }
+        return null;
+    }
+    
+    public function getUserLocation()
+    {
+        $attributes = $this->getUserAttributes();
+        if(isset($attributes['location']) && isset($attributes['location']['id'])) {
+            return $this->_api->api($attributes['location']['id'], 'GET');
         }
         return null;
     }
