@@ -62,13 +62,7 @@ class Facebook extends \yii\authclient\clients\Facebook implements \filsh\yii2\s
     protected function normalizeUserAttributes($attributes)
     {
         if(!empty($attributes['birthday'])) {
-            // This person's birthday in the format MM/DD/YYYY.
-            $birthday = strtotime($attributes['birthday']);
-            if($birthday) {
-                $attributes['birth_day'] = date('d', $birthday);
-                $attributes['birth_month'] = date('m', $birthday);
-                $attributes['birth_year'] = date('Y', $birthday);
-            }
+            list($attributes['birth_day'], $attributes['birth_month'], $attributes['birth_year']) = $this->parseBirthday($attributes['birthday']);
         }
         return parent::normalizeUserAttributes($attributes);
     }

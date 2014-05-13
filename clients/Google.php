@@ -10,6 +10,8 @@ class Google extends \yii\authclient\clients\GoogleOAuth implements \filsh\yii2\
     
     private $_oauth2Service;
     
+    private $_plusService;
+    
     private $_calendarService;
     
     public function init()
@@ -49,12 +51,34 @@ class Google extends \yii\authclient\clients\GoogleOAuth implements \filsh\yii2\
         return null;
     }
     
+    /**
+     * @inheritdoc
+     */
+    protected function normalizeUserAttributes($attributes)
+    {
+        if(empty($attributes['birthday'])) {
+            $people = $this->getPlusService()->people->get($attributes['id']);
+            if(property_exists($people, 'birthday')) {
+                list($attributes['birth_day'], $attributes['birth_month'], $attributes['birth_year']) = $this->parseBirthday($people->birthday);
+            }
+        }
+        return parent::normalizeUserAttributes($attributes);
+    }
+    
     private function getOauth2Service()
     {
         if($this->_oauth2Service === null) {
             $this->_oauth2Service = new \Google_Service_Oauth2($this->_client);
         }
         return $this->_oauth2Service;
+    }
+    
+    private function getPlusService()
+    {
+        if($this->_plusService === null) {
+            $this->_plusService = new \Google_Service_Plus($this->_client);
+        }
+        return $this->_plusService;
     }
     
     private function getCalendarService()
