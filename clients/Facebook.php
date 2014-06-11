@@ -17,6 +17,11 @@ class Facebook extends \yii\authclient\clients\Facebook implements \filsh\yii2\s
         ]);
     }
     
+    public function getService()
+    {
+        return $this->_api;
+    }
+    
     public function setAccessToken($token)
     {
         $params = [];
