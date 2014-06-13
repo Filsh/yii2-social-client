@@ -58,7 +58,7 @@ class Google extends \yii\authclient\clients\GoogleOAuth implements \filsh\yii2\
     {
         if(empty($attributes['birthday'])) {
             $people = $this->getPlusService()->people->get($attributes['id']);
-            if(property_exists($people, 'birthday')) {
+            if(property_exists($people, 'birthday') && !empty($people->birthday)) {
                 list($attributes['birth_day'], $attributes['birth_month'], $attributes['birth_year']) = $this->parseBirthday($people->birthday);
             }
         }
