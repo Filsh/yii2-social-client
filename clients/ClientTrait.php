@@ -15,7 +15,7 @@ trait ClientTrait
     
     public function getUserLocation()
     {
-        return null;
+        throw new \yii\base\Exception('Method not implemented.');
     }
     
     protected function parseBirthday($birthday)
