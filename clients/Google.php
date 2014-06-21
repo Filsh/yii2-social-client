@@ -2,6 +2,9 @@
 
 namespace filsh\yii2\social\clients;
 
+use Yii;
+use yii\console\Application;
+
 class Google extends \yii\authclient\clients\GoogleOAuth implements \filsh\yii2\social\ClientInterface
 {
     use ClientTrait;
@@ -25,6 +28,11 @@ class Google extends \yii\authclient\clients\GoogleOAuth implements \filsh\yii2\
         $this->_client->setScopes($this->scope);
     }
     
+    public function getService()
+    {
+        return $this->_client;
+    }
+    
     public function setAccessToken($token)
     {
         $params = [];
@@ -37,9 +45,11 @@ class Google extends \yii\authclient\clients\GoogleOAuth implements \filsh\yii2\
         if(!isset($params['access_token'])) {
             throw new \yii\base\Exception('Not supported access token.');
         }
-        
         $this->_client->setAccessToken(json_encode($params));
-        parent::setAccessToken($token);
+        
+        if(!(Yii::$app instanceof Application)) {
+            parent::setAccessToken($token);
+        }
     }
     
     public function getUserAvatar()

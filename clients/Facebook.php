@@ -2,6 +2,9 @@
 
 namespace filsh\yii2\social\clients;
 
+use Yii;
+use yii\console\Application;
+
 class Facebook extends \yii\authclient\clients\Facebook implements \filsh\yii2\social\ClientInterface
 {
     use ClientTrait;
@@ -35,7 +38,10 @@ class Facebook extends \yii\authclient\clients\Facebook implements \filsh\yii2\s
             throw new \yii\base\Exception('Not supported access token.');
         }
         $this->_api->setAccessToken($params['access_token']);
-        parent::setAccessToken($token);
+        
+        if(!(Yii::$app instanceof Application)) {
+            parent::setAccessToken($token);
+        }
     }
     
     public function getUserAvatar()
