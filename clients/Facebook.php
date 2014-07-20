@@ -3,7 +3,6 @@
 namespace filsh\yii2\social\clients;
 
 use Yii;
-use yii\console\Application;
 
 class Facebook extends \yii\authclient\clients\Facebook implements \filsh\yii2\social\ClientInterface
 {
@@ -11,17 +10,15 @@ class Facebook extends \yii\authclient\clients\Facebook implements \filsh\yii2\s
     
     private $_api;
     
-    public function init()
-    {
-        parent::init();
-        $this->_api = new libs\Facebook([
-            'appId' => $this->clientId,
-            'secret' => $this->clientSecret
-        ]);
-    }
-    
     public function getService()
     {
+        if($this->_api === null) {
+            $this->_api = new libs\Facebook([
+                'appId' => $this->clientId,
+                'secret' => $this->clientSecret
+            ]);
+        }
+        
         return $this->_api;
     }
     
@@ -37,16 +34,16 @@ class Facebook extends \yii\authclient\clients\Facebook implements \filsh\yii2\s
         if(!isset($params['access_token'])) {
             throw new \yii\base\Exception('Not supported access token.');
         }
-        $this->_api->setAccessToken($params['access_token']);
+        $this->getService()->setAccessToken($params['access_token']);
         
-        if(!(Yii::$app instanceof Application)) {
+        if(!(Yii::$app instanceof \yii\console\Application)) {
             parent::setAccessToken($token);
         }
     }
     
     public function getUserAvatar()
     {
-        $result = $this->_api->api($this->getUserId() . '/picture', 'GET', [
+        $result = $this->getService()->api($this->getUserId() . '/picture', 'GET', [
             'width' => 500,
             'height' => 500,
             'redirect' => false
@@ -62,7 +59,7 @@ class Facebook extends \yii\authclient\clients\Facebook implements \filsh\yii2\s
     {
         $attributes = $this->getUserAttributes();
         if(isset($attributes['location']) && isset($attributes['location']['id'])) {
-            return $this->_api->api($attributes['location']['id'], 'GET');
+            return $this->getService()->api($attributes['location']['id'], 'GET');
         }
         return null;
     }
