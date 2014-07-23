@@ -24,6 +24,6 @@ trait ClientTrait
         if($timestamp = strtotime($birthday)) {
             return [date('d', $timestamp), date('m', $timestamp), date('Y', $timestamp)];
         }
-        return [];
+        return [null, null, null];
     }
 }
