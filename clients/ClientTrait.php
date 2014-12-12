@@ -13,6 +13,15 @@ trait ClientTrait
         return $attributes['id'];
     }
     
+    public function getUserEmail()
+    {
+        $attributes = $this->getUserAttributes();
+        if(empty($attributes['email'])) {
+            throw new \yii\base\Exception('Not found user id.');
+        }
+        return $attributes['email'];
+    }
+    
     public function getUserLocation()
     {
         throw new \yii\base\Exception('Method not implemented.');

@@ -52,6 +52,12 @@ class Google extends \yii\authclient\clients\GoogleOAuth implements \filsh\yii2\
         }
     }
     
+    public function getUserFullName()
+    {
+        $attributes = $this->getUserAttributes();
+        return $attributes['given_name'] . ' ' . $attributes['family_name'];
+    }
+    
     public function getUserAvatar()
     {
         $attr = $this->getUserAttributes();

@@ -41,6 +41,28 @@ class Facebook extends \yii\authclient\clients\Facebook implements \filsh\yii2\s
         }
     }
     
+    public function getAccessToken()
+    {
+        if(!(Yii::$app instanceof \yii\console\Application)) {
+            return parent::getAccessToken();
+        } else {
+            return $this->createToken([
+                'params' => [
+                    'access_token' => $this->getService()->getAccessToken(),
+                    'token_type' => 'Bearer',
+                    'expires_in' => 3600,
+                    'created' => time()
+                ]
+            ]);
+        }
+    }
+    
+    public function getUserFullName()
+    {
+        $attributes = $this->getUserAttributes();
+        return $attributes['first_name'] . ' ' . $attributes['last_name'];
+    }
+    
     public function getUserAvatar()
     {
         $result = $this->getService()->api($this->getUserId() . '/picture', 'GET', [
