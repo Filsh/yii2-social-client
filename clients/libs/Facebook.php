@@ -2,7 +2,7 @@
 
 namespace filsh\yii2\social\clients\libs;
 
-class Facebook extends \BaseFacebook
+class Facebook extends \Facebook\Facebook
 {
     protected function clearAllPersistentData() {}
 

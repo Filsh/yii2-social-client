@@ -14,8 +14,8 @@ class Facebook extends \yii\authclient\clients\Facebook implements \filsh\yii2\s
     {
         if($this->_api === null) {
             $this->_api = new libs\Facebook([
-                'appId' => $this->clientId,
-                'secret' => $this->clientSecret
+                'app_id' => $this->clientId,
+                'app_secret' => $this->clientSecret
             ]);
         }
         
@@ -34,7 +34,7 @@ class Facebook extends \yii\authclient\clients\Facebook implements \filsh\yii2\s
         if(!isset($params['access_token'])) {
             throw new \yii\base\Exception('Not supported access token.');
         }
-        $this->getService()->setAccessToken($params['access_token']);
+        $this->getService()->setDefaultAccessToken($params['access_token']);
         
         if(!(Yii::$app instanceof \yii\console\Application)) {
             parent::setAccessToken($token);
