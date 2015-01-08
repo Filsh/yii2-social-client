@@ -48,7 +48,7 @@ class Facebook extends \yii\authclient\clients\Facebook implements \filsh\yii2\s
         } else {
             return $this->createToken([
                 'params' => [
-                    'access_token' => $this->getService()->getAccessToken(),
+                    'access_token' => $this->getService()->getDefaultAccessToken(),
                     'token_type' => 'Bearer',
                     'expires_in' => 3600,
                     'created' => time()
@@ -65,14 +65,18 @@ class Facebook extends \yii\authclient\clients\Facebook implements \filsh\yii2\s
     
     public function getUserAvatar()
     {
-        $result = $this->getService()->api($this->getUserId() . '/picture', 'GET', [
+        /* @var $response \Facebook\FacebookResponse */
+        $response = $this->getService()->sendRequest('GET', $this->getUserId() . '/picture', [
             'width' => 500,
             'height' => 500,
             'redirect' => false
         ]);
-
-        if(!empty($result['data']) && !$result['data']['is_silhouette']) {
-            return $result['data']['url'];
+        
+        if(!$response->isError()) {
+            $body = $response->getDecodedBody();
+            if(!empty($body['data']) && !$body['data']['is_silhouette']) {
+                return $body['data']['url'];
+            }
         }
         return null;
     }
@@ -81,7 +85,11 @@ class Facebook extends \yii\authclient\clients\Facebook implements \filsh\yii2\s
     {
         $attributes = $this->getUserAttributes();
         if(isset($attributes['location']) && isset($attributes['location']['id'])) {
-            return $this->getService()->api($attributes['location']['id'], 'GET');
+            /* @var $response \Facebook\FacebookResponse */
+            $response = $this->getService()->sendRequest('GET', $attributes['location']['id']);
+            if(!$response->isError()) {
+                return $response->getDecodedBody();
+            }
         }
         return null;
     }
